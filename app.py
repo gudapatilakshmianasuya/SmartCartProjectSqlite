@@ -711,6 +711,11 @@ def restore_item(item_id):
 # =================================================================
 # ROUTE 16: USER REGISTRATION
 # =================================================================
+@app.route("/")
+def home():
+    return redirect("/user-register")
+
+
 
 @app.route('/user-register', methods=['GET', 'POST'])
 def user_register():
