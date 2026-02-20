@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Invoice #{{ order.user_order_no }}</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f6f8;
+    }
+    .invoice-container {
+        max-width: 750px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px 25px;
+        border-radius: 6px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.07);
+        font-size: 12px;
+        line-height: 1.3;
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+    .company h2 { color: #0d6efd; margin: 0; font-size: 18px; }
+    .company p { margin: 2px 0; color: #555; font-size: 11px; }
+    .invoice-info p { margin: 2px 0; font-size: 11px; }
+    .customer-details { margin-bottom: 15px; }
+    .customer-details h3 { margin-bottom: 6px; font-size: 14px; color: #333; }
+    .customer-details p { margin: 2px 0; color: #555; font-size: 11px; }
+
+    .items { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+    .items th {
+        background-color: #0d6efd;
+        color: #fff;
+        padding: 8px 6px;
+        font-weight: 600;
+        font-size: 11px;
+        text-align: left;
+    }
+    .items td {
+        padding: 6px 6px;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 11px;
+    }
+    .items tr:last-child td { border-bottom: none; }
+    .total-row td {
+        font-weight: bold;
+        background-color: #f8f9fa;
+        text-align: right;
+        padding: 8px 6px;
+        font-size: 11px;
+    }
+
+    .footer {
+        text-align: center;
+        font-size: 10px;
+        color: #888;
+        border-top: 1px solid #e0e0e0;
+        padding-top: 8px;
+        margin-top: 5px;
+    }
+</style>
+</head>
+<body>
+
+<div class="invoice-container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="company">
+            <h2>SmartCart</h2>
+            <p>Email: support@smartcart.com</p>
+            <p>India</p>
+        </div>
+        <div class="invoice-info">
+            <p><strong>Invoice #: </strong> {{ order.user_order_no }}</p>
+            <p><strong>Order ID: </strong> {{ order.order_id }}</p>
+            <p><strong>Payment ID: </strong> {{ order.razorpay_payment_id }}</p>
+            <p><strong>Date: </strong> {{ order.created_at }}</p>
+        </div>
+    </div>
+
+    <!-- CUSTOMER DETAILS -->
+    <div class="customer-details">
+        <h3>Customer Details</h3>
+        <p><strong>User ID:</strong> {{ order.user_id }}</p>
+        <p><strong>Name:</strong> {{ user.name if user else 'N/A' }}</p>
+        <p><strong>Email:</strong> {{ user.email if user else 'N/A' }}</p>
+    </div>
+
+    <!-- ITEMS -->
+    <table class="items">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price (₹)</th>
+                <th>Total (₹)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for it in items %}
+            <tr>
+                <td>{{ it.product_name }}</td>
+                <td>{{ it.quantity }}</td>
+                <td>₹{{ it.price }}</td>
+                <td>₹{{ it.quantity * it.price }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td colspan="3">Grand Total</td>
+                <td>₹{{ order.amount }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Thank you for shopping with SmartCart!<br>
+        This is a system-generated invoice.<br>
+        Support: support@smartcart.com
+    </div>
+
+</div>
+
+</body>
+</html>
