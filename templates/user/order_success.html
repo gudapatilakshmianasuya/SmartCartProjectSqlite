@@ -61,7 +61,7 @@
                             <div class="col-6 text-muted">Order Date</div>
                             <div class="col-6 text-end">
                                 {% if order.created_at %}
-                                    {{ order.created_at.strftime('%d %b %Y, %I:%M %p') }}
+                                    {{ order.created_at }}
                                 {% else %}
                                     -
                                 {% endif %}

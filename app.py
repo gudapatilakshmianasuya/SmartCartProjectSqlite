@@ -10,6 +10,7 @@ import os
 from werkzeug.utils import secure_filename
 import razorpay
 
+
 app = Flask(__name__)
 
 # Secret key for session management
@@ -1483,6 +1484,7 @@ def order_success(order_db_id):
         return redirect('/user/user-login')
 
     conn = get_db_connection()
+    conn.row_factory = sqlite3.Row   # ✅ ADD THIS
     cursor = conn.cursor()
 
     cursor.execute(
