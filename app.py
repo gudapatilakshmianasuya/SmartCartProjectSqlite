@@ -1571,15 +1571,25 @@ def download_invoice(order_id):
     """, (session['user_id'],))
     user = cursor.fetchone()
 
+    # 4️⃣ Fetch address using order.address_id ✅ NEW
+    address = None
+    if order['address_id']:
+        cursor.execute("""
+            SELECT * FROM user_addresses
+            WHERE address_id=?
+        """, (order['address_id'],))
+        address = cursor.fetchone()
+
     cursor.close()
     conn.close()
 
-    # 4️⃣ Pass user to template
+    # 5️⃣ Pass address also to template ✅
     html = render_template(
         "user/invoice.html",
         order=order,
         items=items,
-        user=user
+        user=user,
+        address=address   # 👈 IMPORTANT
     )
 
     pdf = generate_pdf(html)

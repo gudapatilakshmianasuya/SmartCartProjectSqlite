@@ -5,66 +5,81 @@
 <title>Invoice #{{ order.user_order_no }}</title>
 <style>
     body {
-        font-family: 'Arial', sans-serif;
+        font-family: Arial, sans-serif;
         margin: 0;
-        padding: 0;
-        background-color: #f5f6f8;
+        padding: 10px;
+        font-size: 11px;
+        color: #333;
     }
+
     .invoice-container {
+        width: 100%;
         max-width: 750px;
-        margin: 20px auto;
-        background-color: #fff;
-        padding: 20px 25px;
-        border-radius: 6px;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.07);
-        font-size: 12px;
-        line-height: 1.3;
+        margin: auto;
     }
+
     .header {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        border-bottom: 2px solid #e0e0e0;
-        padding-bottom: 10px;
-        margin-bottom: 15px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 6px;
+        margin-bottom: 8px;
     }
-    .company h2 { color: #0d6efd; margin: 0; font-size: 18px; }
-    .company p { margin: 2px 0; color: #555; font-size: 11px; }
-    .invoice-info p { margin: 2px 0; font-size: 11px; }
-    .customer-details { margin-bottom: 15px; }
-    .customer-details h3 { margin-bottom: 6px; font-size: 14px; color: #333; }
-    .customer-details p { margin: 2px 0; color: #555; font-size: 11px; }
 
-    .items { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-    .items th {
-        background-color: #0d6efd;
-        color: #fff;
-        padding: 8px 6px;
-        font-weight: 600;
-        font-size: 11px;
+    .company h2 {
+        margin: 0;
+        font-size: 16px;
+        color: #0d6efd;
+    }
+
+    .company p,
+    .invoice-info p {
+        margin: 2px 0;
+        font-size: 10px;
+    }
+
+    .section {
+        margin-bottom: 10px;
+    }
+
+    .section h3 {
+        margin: 4px 0;
+        font-size: 12px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 3px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+    }
+
+    th {
+        background: #0d6efd;
+        color: white;
+        padding: 5px;
+        font-size: 10px;
         text-align: left;
     }
-    .items td {
-        padding: 6px 6px;
-        border-bottom: 1px solid #e0e0e0;
-        font-size: 11px;
+
+    td {
+        padding: 5px;
+        border-bottom: 1px solid #ddd;
+        font-size: 10px;
     }
-    .items tr:last-child td { border-bottom: none; }
+
     .total-row td {
         font-weight: bold;
-        background-color: #f8f9fa;
         text-align: right;
-        padding: 8px 6px;
-        font-size: 11px;
     }
 
     .footer {
         text-align: center;
-        font-size: 10px;
-        color: #888;
-        border-top: 1px solid #e0e0e0;
-        padding-top: 8px;
-        margin-top: 5px;
+        font-size: 9px;
+        margin-top: 8px;
+        border-top: 1px solid #ccc;
+        padding-top: 5px;
     }
 </style>
 </head>
@@ -79,52 +94,64 @@
             <p>Email: support@smartcart.com</p>
             <p>India</p>
         </div>
+
         <div class="invoice-info">
-            <p><strong>Invoice #: </strong> {{ order.user_order_no }}</p>
-            <p><strong>Order ID: </strong> {{ order.order_id }}</p>
-            <p><strong>Payment ID: </strong> {{ order.razorpay_payment_id }}</p>
-            <p><strong>Date: </strong> {{ order.created_at }}</p>
+            <p><strong>Invoice:</strong> {{ order.user_order_no }}</p>
+            <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+            <p><strong>Payment:</strong> {{ order.payment_status }}</p>
+            <p><strong>Date:</strong> {{ order.created_at }}</p>
         </div>
     </div>
 
-    <!-- CUSTOMER DETAILS -->
-    <div class="customer-details">
-        <h3>Customer Details</h3>
-        <p><strong>User ID:</strong> {{ order.user_id }}</p>
-        <p><strong>Name:</strong> {{ user.name if user else 'N/A' }}</p>
-        <p><strong>Email:</strong> {{ user.email if user else 'N/A' }}</p>
+    <!-- CUSTOMER -->
+    <div class="section">
+        <h3>Billing & Shipping</h3>
+        <p><strong>Name:</strong> {{ address.full_name if address else user.name }}</p>
+        <p><strong>Email:</strong> {{ user.email if user else '' }}</p>
+        <p><strong>Phone:</strong> {{ address.phone if address else '' }}</p>
+        <p>
+            <strong>Address:</strong>
+            {{ address.address_line if address else '' }},
+            {{ address.city if address else '' }},
+            {{ address.state if address else '' }} -
+            {{ address.pincode if address else '' }}
+        </p>
     </div>
 
     <!-- ITEMS -->
-    <table class="items">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Qty</th>
-                <th>Price (₹)</th>
-                <th>Total (₹)</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for it in items %}
-            <tr>
-                <td>{{ it.product_name }}</td>
-                <td>{{ it.quantity }}</td>
-                <td>₹{{ it.price }}</td>
-                <td>₹{{ it.quantity * it.price }}</td>
-            </tr>
-            {% endfor %}
-            <tr class="total-row">
-                <td colspan="3">Grand Total</td>
-                <td>₹{{ order.amount }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="section">
+        <h3>Order Items</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Price (₹)</th>
+                    <th>Total (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for it in items %}
+                <tr>
+                    <td>{{ it.product_name }}</td>
+                    <td>{{ it.quantity }}</td>
+                    <td>{{ "%.2f"|format(it.price) }}</td>
+                    <td>{{ "%.2f"|format(it.quantity * it.price) }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td colspan="3">Grand Total</td>
+                    <td>₹{{ "%.2f"|format(order.amount) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
+    <!-- FOOTER -->
     <div class="footer">
-        Thank you for shopping with SmartCart!<br>
-        This is a system-generated invoice.<br>
-        Support: support@smartcart.com
+        Thank you for shopping with SmartCart |
+        System Generated Invoice |
+        support@smartcart.com
     </div>
 
 </div>
