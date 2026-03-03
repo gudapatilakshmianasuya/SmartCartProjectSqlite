@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <!-- ✅ Required for Mobile Responsiveness -->
+    <!-- Required for Mobile Responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{% block title %}SmartCart{% endblock %}</title>
@@ -19,17 +19,14 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container">
 
-        <!-- Brand -->
         <a class="navbar-brand fw-bold" href="/admin/item-list">
             SmartCart
         </a>
 
-        <!-- Toggle -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Links -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
 
@@ -41,7 +38,6 @@
                     <a class="nav-link" href="/contact">Contact</a>
                 </li>
 
-                <!-- Show Logout only if admin logged in -->
                 {% if session.get('admin_id') %}
                     <li class="nav-item ms-3">
                         <a class="btn btn-outline-light btn-sm px-3" href="/admin-logout">
@@ -55,13 +51,13 @@
     </div>
 </nav>
 
-<!-- MAIN CONTENT -->
-<div class="container my-5">
+<!-- MAIN CONTENT (FIXED SECTION) -->
+<div class="container flex-grow-1 d-flex justify-content-center align-items-center py-4">
     {% block content %}{% endblock %}
 </div>
 
 <!-- FOOTER -->
-<footer class="bg-dark text-white text-center py-3 mt-auto">
+<footer class="bg-dark text-white text-center py-3">
     <p class="mb-0">
         © 2026 SmartCart | Developed by Gudapati Lakshmi Anasuya
     </p>
