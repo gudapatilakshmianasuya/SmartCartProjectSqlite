@@ -23,7 +23,9 @@
             SmartCart
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -39,11 +41,11 @@
                 </li>
 
                 {% if session.get('admin_id') %}
-                    <li class="nav-item ms-3">
-                        <a class="btn btn-outline-light btn-sm px-3" href="/admin-logout">
-                            Logout
-                        </a>
-                    </li>
+                <li class="nav-item ms-3">
+                    <a class="btn btn-outline-light btn-sm px-3" href="/admin-logout">
+                        Logout
+                    </a>
+                </li>
                 {% endif %}
 
             </ul>
@@ -51,13 +53,15 @@
     </div>
 </nav>
 
-<!-- MAIN CONTENT (FIXED SECTION) -->
-<div class="container flex-grow-1 d-flex justify-content-center align-items-center py-4">
-    {% block content %}{% endblock %}
-</div>
+<!-- MAIN CONTENT -->
+<main class="flex-grow-1">
+    <div class="container py-4">
+        {% block content %}{% endblock %}
+    </div>
+</main>
 
 <!-- FOOTER -->
-<footer class="bg-dark text-white text-center py-3">
+<footer class="bg-dark text-white text-center py-3 mt-auto">
     <p class="mb-0">
         © 2026 SmartCart | Developed by Gudapati Lakshmi Anasuya
     </p>
